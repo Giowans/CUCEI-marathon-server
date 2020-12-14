@@ -13,6 +13,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     url: "mongodb+srv://giowans999:ppip999@ppipcluster.yjwj0.mongodb.net/ppip?retryWrites=true&w=majority",
     useNewUrlParser: true,
     logging: true,
+    ssl: true,
+    authSource: "giowans999",
+    replicaSet: "ppipcluster-shard-00-01",
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
 }; 
