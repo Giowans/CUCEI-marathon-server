@@ -10,7 +10,8 @@ import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
     type: 'mongodb',
-    url: "mongodb+srv://giowans999:ppip999@ppipcluster.yjwj0.mongodb.net/ppip?retryWrites=true&w=majority",
+    useNewUrlParser: true,
+    url: "mongodb://giowans999:password@ppipcluster-shard-00-00.yjwj0.mongodb.net:27017,ppipcluster-shard-00-01.yjwj0.mongodb.net:27017,ppipcluster-shard-00-02.yjwj0.mongodb.net:27017/ppip?ssl=true&replicaSet=ppipcluster-shard-00-01&authSource=ppip999&retryWrites=true",
     ssl: true,
     useUnifiedTopology: true,
     authSource: 'ppip999',
