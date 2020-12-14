@@ -14,6 +14,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     useNewUrlParser: true,
     logging: true,
     ssl: true,
+    authSource: 'ppip',
     replicaSet: "ppipcluster-shard-00-01",
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
