@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AddAlumnoDto } from 'src/alumno/dto/addAlumno.dto';
 import { UserSignInDTO } from './dto/user-sigin.dto';
 import { UserSignUpDTO } from './dto/user-signup.dto';
 import { UsersService } from './users.service';
@@ -14,12 +13,6 @@ export class UsersController {
     @Post('/signup')
     SignUp(@Body() UserSignUpDTO: UserSignUpDTO): Promise<Object>{
         return this.UsersService.SignUp(UserSignUpDTO);    
-    }
-
-    @Post('/addAlumno')
-    AddAlumno(@Body() addAlumnoDto: AddAlumnoDto)
-    {
-        return this.UsersService.addAlumno(addAlumnoDto);
     }
 
     @Post('/login')
@@ -59,10 +52,10 @@ export class UsersController {
         return this.UsersService.changePassword(id_user, newPassword);
     }
 
-    @Put('/update-service/:code')
+    @Put('/update-student-try/:idTry')
     @UseGuards(AuthGuard())
-    updateServiceTime(@Param('code') alumnoCode: string, @Body('serviceTime') time: number)
+    updateServiceTime(@Param('idTry') idTry: string, @Body('status') status: number)
     {
-        return this.UsersService.updateStudentServiceTime(alumnoCode,time);
+        return this.UsersService.updateAlumntoRegisterStatus(idTry, status);
     }
 }

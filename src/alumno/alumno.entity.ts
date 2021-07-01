@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Alumno extends BaseEntity {
@@ -6,14 +6,27 @@ export class Alumno extends BaseEntity {
     _id: string;
 
     @PrimaryColumn()
+    idTry: string
+
+    @Column()
     code: string;
 
-    @Column({unique: true, nullable: false})
+    @Column({ nullable: false })
     name: string;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     career: string;
 
-    @Column({default: 0})
-    service_seconds: number;
+    @Column({ default: 0 })
+    minutes: number;
+
+    @Column({ default: 0 })
+    meters: number;
+
+    @Column({ nullable: false })
+    evidence: string;
+
+    @Column({ nullable: false, default: 1 })
+    status: number;
+
 }

@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { getConnection, Like } from 'typeorm';
 import { Alumno } from 'src/alumno/alumno.entity';
 import { AddAlumnoDto } from 'src/alumno/dto/addAlumno.dto';
+import axios from 'axios';
 
 @Injectable()
 export class UsersService {
@@ -70,15 +71,25 @@ export class UsersService {
         return response;
     }
 
-    async updateStudentServiceTime(alumnoCode: string, time: number)
+    async updateAlumntoRegisterStatus(idTry: string, status: number)
     {
         const alumnoRepo = getConnection().getRepository(Alumno);
-        const foundedAlumno = await alumnoRepo.findOne({code: alumnoCode});
+        const foundedAlumno = await alumnoRepo.findOne({idTry: idTry});
         if(!foundedAlumno)
         {
             throw new ConflictException('El alumno no existe en la Base de datos');
         }
-        foundedAlumno.service_seconds = foundedAlumno.service_seconds + time;
+        foundedAlumno.status = status;
+        if(status === 2)
+        {
+            //Obtain data from hosted 00webHost database
+            const response = await axios.get(`https://tempbackend.000webhostapp.com/getStudentByCode.php?codigo=${foundedAlumno.code}`);
+            const newTime = Number(foundedAlumno.minutes) + Number(response.data[0].Tiempo);
+            const newDistance = Number(foundedAlumno.meters) + Number(response.data[0].Distancia);
+            console.log(foundedAlumno.minutes, foundedAlumno.meters,Number(response.data[0].Tiempo), Number(response.data[0].Distancia), newTime, newDistance);
+            //Update time and distance on DB hosted on 00webHost
+            await axios.get(`https://tempbackend.000webhostapp.com/updateDistanceAndTime.php?codigo=${foundedAlumno.code}&tiempo=${newTime}&distancia=${newDistance}`).then(res => console.log(res.data));
+        }
         return await alumnoRepo.save(foundedAlumno);
     }
 
@@ -121,15 +132,5 @@ export class UsersService {
         {
             return await getConnection().getRepository(Alumno).find();
         }
-    }
-
-    async addAlumno(addAlumnoDto: AddAlumnoDto): Promise<Alumno>
-    {
-        const alumno = new Alumno();
-        alumno.name = addAlumnoDto.name;
-        alumno.career = addAlumnoDto.career;
-        alumno.code = addAlumnoDto.code;
-        alumno.service_seconds = 0;
-        return await getConnection().getRepository(Alumno).save(alumno);
     }
 }
